@@ -1,15 +1,25 @@
+# ============================================================================
+# FIROZ OS Payload - Makefile (Optimized for GitHub Actions)
+# ============================================================================
+
 PS5_PAYLOAD_SDK ?= /opt/ps5-payload-sdk
 include $(PS5_PAYLOAD_SDK)/toolchain/prospero.mk
 
 TARGET := FIROZ_OS.elf
 SRCS   := main.c
 CFLAGS := -O2 -Wall -Wextra -Wno-unused-parameter
+LDFLAGS := -Wl,-z,separate-code -Wl,--as-needed
 LDADD  := -lpthread
 
 all: $(TARGET)
 
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $@ $(SRCS) $(LDADD)
+	@echo "[*] Compiling $(TARGET)..."
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(SRCS) $(LDADD)
+	@echo "[+] Build successful!"
 
 clean:
+	@echo "[*] Cleaning..."
 	rm -f $(TARGET)
+
+.PHONY: all clean
