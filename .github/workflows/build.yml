@@ -29,6 +29,14 @@ jobs:
           make clean
           make
 
+      - name: Verify Segment Flags
+        run: |
+          echo "=== Checking segment flags ==="
+          readelf -l FIROZ_OS.elf | grep -E "Type|Flags|LOAD"
+          echo ""
+          echo "=== Checking NEEDED libraries ==="
+          readelf -d FIROZ_OS.elf | grep NEEDED
+
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
