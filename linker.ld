@@ -6,7 +6,7 @@
 ENTRY(_start)
 
 PHDRS {
-  text_segment PT_LOAD FLAGS(4);        /* R + E (Read + Execute) */
+  text_segment PT_LOAD FLAGS(5);        /* R + E (Read + Execute) */
   rodata_segment PT_LOAD FLAGS(4);      /* R (Read-only) */
   data_segment PT_LOAD FLAGS(6);        /* RW (Read + Write) */
   dynamic_segment PT_DYNAMIC FLAGS(6);  /* RW (Read + Write) */
@@ -75,6 +75,27 @@ SECTIONS {
   } : data_segment
 
   /* ========================================================================
+     DYNAMIC SYMBOL TABLE AND RELOCATIONS
+     ======================================================================== */
+  
+  .dynsym : {
+    *(.dynsym)
+  } : data_segment
+  
+  .dynstr : {
+    *(.dynstr)
+  } : data_segment
+  
+  .rela.dyn : {
+    *(.rela.dyn)
+    *(.rela.plt)
+  } : data_segment
+  
+  .gnu.hash : {
+    *(.gnu.hash)
+  } : data_segment
+
+  /* ========================================================================
      DEBUG INFO - Stripped in production but useful for debugging
      ======================================================================== */
   
@@ -94,21 +115,8 @@ SECTIONS {
      OTHER SECTIONS - For compatibility
      ======================================================================== */
   
-  .dynsym : {
-    *(.dynsym)
-  }
-  
-  .dynstr : {
-    *(.dynstr)
-  }
-  
-  .rela.dyn : {
-    *(.rela.dyn)
-    *(.rela.plt)
-  }
-  
-  .gnu.hash : {
-    *(.gnu.hash)
+  .comment : {
+    *(.comment)
   }
 
   /* Remove unused sections */
