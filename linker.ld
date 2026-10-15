@@ -18,22 +18,12 @@ SECTIONS {
   
   . = 0x0;
   
-  .text : ONLY {
+  .text : {
     KEEP(*(.text.entry))
     *(.text .text.* .gnu.linkonce.t.*)
     KEEP(*(.init))
     KEEP(*(.fini))
-  } : text_segment
-
-  /* ========================================================================
-     PLT and GOT sections - Part of text segment
-     ======================================================================== */
-  
-  .plt : {
     *(.plt)
-  } : text_segment
-  
-  .plt.got : {
     *(.plt.got)
   } : text_segment
 
@@ -43,22 +33,22 @@ SECTIONS {
   
   . = ALIGN(0x1000);
   
-  .rodata : ONLY {
+  .rodata : {
     *(.rodata .rodata.* .gnu.linkonce.r.*)
     *(.eh_frame_hdr)
     *(.eh_frame)
   } : rodata_segment
   
-  .data.rel.ro : ONLY {
+  .data.rel.ro : {
     *(.data.rel.ro .data.rel.ro.*)
   } : rodata_segment
   
-  .got : ONLY {
+  .got : {
     *(.got)
   } : rodata_segment
 
   /* ========================================================================
-     DYNAMIC SECTION - Dynamic linking info (goes into rodata segment)
+     DYNAMIC SECTION
      ======================================================================== */
   
   . = ALIGN(0x1000);
@@ -73,19 +63,19 @@ SECTIONS {
   
   . = ALIGN(0x1000);
   
-  .data : ONLY {
+  .data : {
     *(.data .data.* .gnu.linkonce.d.*)
     *(.init_array)
     *(.fini_array)
   } : data_segment
   
-  .bss : ONLY {
+  .bss : {
     *(.bss .bss.* .gnu.linkonce.b.*)
     *(COMMON)
   } : data_segment
 
   /* ========================================================================
-     SYMBOL TABLES AND RELOCATIONS (in data segment)
+     SYMBOL TABLES AND RELOCATIONS
      ======================================================================== */
   
   .dynsym : {
@@ -101,24 +91,12 @@ SECTIONS {
     *(.rela.plt)
   } : data_segment
   
-  .rela.text : {
-    *(.rela.text*)
-  } : data_segment
-  
   .gnu.hash : {
     *(.gnu.hash)
   } : data_segment
 
   /* ========================================================================
-     EXCEPTION HANDLING (in rodata if not already included)
-     ======================================================================== */
-  
-  .eh_frame : {
-    KEEP(*(.eh_frame))
-  } : rodata_segment
-
-  /* ========================================================================
-     DEBUG SECTIONS (not loaded at runtime)
+     DEBUG SECTIONS
      ======================================================================== */
   
   .symtab : {
@@ -132,10 +110,6 @@ SECTIONS {
   .shstrtab : {
     *(.shstrtab)
   }
-
-  /* ========================================================================
-     COMMENT SECTION
-     ======================================================================== */
   
   .comment : {
     *(.comment)
